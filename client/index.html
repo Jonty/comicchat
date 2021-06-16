@@ -4,8 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="referrer" content="no-referrer">
-  <title>comic chat</title>
-  <link rel="stylesheet" href="./css/cchat.css">
+  <title>ohnode.net: The #freenode comic chat observatory</title>
+  <link rel="stylesheet" href="./css/cchat.css?1">
   <link rel="shortcut icon" href="./res/icon.gif" />
 </head>
 
@@ -13,17 +13,20 @@
   <div id="content"></div>
 
   <div class="input-bar">
-
+    <strong>ohnode.net:</strong> The #freenode comic chat observatory
     <form id="input-form">
-      <input type="text" id="input" placeholder="Your nickname" autocomplete="off" autofocus required />
+      <input type="hidden" id="input" placeholder="Your nickname" autocomplete="off" autofocus required />
     </form>
 
     <form id="room-switcher-form">
-        <input type="text" id="room-switcher" title="Switch rooms..." placeholder="Room" required />
+        <input type="hidden" id="room-switcher" title="Switch rooms..." placeholder="Room" required />
     </form>
 
     <div class="options">
       <div id="status" class="status" title="Connection status">Connecting...</div>
+
+      <input type="checkbox" name="autoscroll" id="autoscroll" checked/>
+      <label title="Auto scroll on new messages" for="autoscroll">Autoscroll</label>
 
       <input type="checkbox" name="notify" id="notify" />
       <label title="Requires Notifications API support." for="notify">Notifications</label>
@@ -51,8 +54,8 @@
     </div>
   </div>
 
-  <script src="./js/ui.js"></script>
-  <script src="./js/client.js"></script>
+  <script src="./js/ui.js?3"></script>
+  <script src="./js/client.js?3"></script>
 </body>
 
 </html>

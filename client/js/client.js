@@ -2,13 +2,14 @@
   'use strict';
 
   var params = (new URL(document.location)).searchParams;
-  var serverAddress = params.get('server') || 'ws://localhost:8084';
+  var serverAddress = params.get('server') || 'ws://ohnode.net:8084';
 
   var ui = new UI({
     content:          document.getElementById('content'),
     input:            document.getElementById('input'),
     inputForm:        document.getElementById('input-form'),
     status:           document.getElementById('status'),
+    autoscrollEnabled:document.getElementById('autoscroll'),
     notifyEnabled:    document.getElementById('notify'),
     ttsEnabled:       document.getElementById('tts'),
     roomSwitcher:     document.getElementById('room-switcher'),
@@ -32,7 +33,7 @@
 
       // Join default room
       if (window.location.hash === '') {
-        window.location.hash = '#!';
+        window.location.hash = '#freenode';
       }
 
       ws.send(JSON.stringify({

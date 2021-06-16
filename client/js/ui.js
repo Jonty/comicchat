@@ -3,6 +3,7 @@ function UI (elements) {
   this.input            = elements.input;
   this.inputForm        = elements.inputForm;
   this.status           = elements.status;
+  this.autoscrollEnabled= elements.autoscrollEnabled;
   this.notifyEnabled    = elements.notifyEnabled;
   this.ttsEnabled       = elements.ttsEnabled;
   this.roomSwitcher     = elements.roomSwitcher;
@@ -175,12 +176,14 @@ UI.prototype = {
 
   addHistory: function (history) {
     for (var i = 0; i < history.length; i++) {
-      this.addLine(JSON.parse(history[i]), false);
+      this.addLine(JSON.parse(history[i]));
     }
-    window.scrollTo(0, document.body.scrollHeight);
+    if (this.autoscrollEnabled.checked === true) {
+      window.scrollTo(0, document.body.scrollHeight);
+    }
   },
 
-  addLine: function (message, stickBottom) {
+  addLine: function (message) {
     // Make a new box if
     // * We hit maximum number of actors in a box
     // * No boxes
@@ -193,7 +196,7 @@ UI.prototype = {
     if (newBox === true) {
       this.currentBox = this.makeBox();
       this.content.appendChild(this.currentBox);
-      if (typeof stickBottom === 'undefined' || stickBottom === true) {
+      if (this.autoscrollEnabled.checked === true) {
         window.scrollTo(0, document.body.scrollHeight);
       }
       this.currentBoxActors = 0;

@@ -22,14 +22,28 @@ console.log("Config:", {
   historySize: historySize
 });
 
+var ports = [80, 9000];
+var staticserver = require('node-static');
+ports.forEach(function(serverPort) {
+  var fileserver = new(staticserver.Server)("./client");
+  var httpServer = http.createServer(
+    function (req, res) {
+      fileserver.serve(req, res);
+    }
+  );
+  httpServer.listen(serverPort, function () {
+    log('Static server listening on port ' + serverPort);
+  });
+});
+
 // Dummy HTML server for websocket server to hook into
-var httpServer = http.createServer(function () {});
-httpServer.listen(wsServerPort, function () {
-  log('Server listening on port ' + wsServerPort);
+var wsHttpServer = http.createServer(function () {});
+wsHttpServer.listen(wsServerPort, function () {
+  log('Websocket server listening on port ' + wsServerPort);
 });
 
 var wsServer = new websocketServer({
-  httpServer: httpServer
+  httpServer: wsHttpServer
 });
 
 function initRoom (name) {
@@ -40,7 +54,7 @@ function initRoom (name) {
 }
 
 wsServer.on('request', function (request, _response) {
-  log('Connection from origin ' + request.origin);
+  log('Connection from origin ' + request.socket.remoteAddress);
   var connection = request.accept(null, request.origin);
   var index = clients.push(connection) - 1;
   var username = false;
@@ -108,20 +122,22 @@ wsServer.on('request', function (request, _response) {
             // Register -- split out into message type?
             username  = obj.text;
           } else {
-            // Broadcast
-            var json = JSON.stringify({
-              type: 'message',
-              room:   obj.room,
-              time:   (new Date()).getTime(),
-              text:   obj.text,
-              author: obj.spoof ? obj.author : username
-            });
+	    if (request.socket.remoteAddress == "::ffff:127.0.0.1") {
+		    // Broadcast
+		    var json = JSON.stringify({
+		      type: 'message',
+		      room:   obj.room,
+		      time:   (new Date()).getTime(),
+		      text:   obj.text,
+		      author: obj.spoof ? obj.author : username
+		    });
 
-            rooms[obj.room].history.push(json);
-            rooms[obj.room].history = rooms[obj.room].history.slice(-historySize);
+		    rooms[obj.room].history.push(json);
+		    rooms[obj.room].history = rooms[obj.room].history.slice(-historySize);
 
-            broadcastTo(obj.room, json);
-          }
+		    broadcastTo(obj.room, json);
+		  }
+	   }
           break;
         }
       }

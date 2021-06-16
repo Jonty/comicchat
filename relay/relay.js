@@ -12,24 +12,22 @@ var WebSocketClient = require('websocket').client;
 
 var config = {
   cchat: {
-    nick: 'ircrelay',
-    room: '#relay',
-    host: 'hidoi.moebros.org',
+    nick: 'c__c',
+    room: '#freenode',
+    host: '127.0.0.1',
     port: 8084,
-    roomLink:  'http://hidoi.moebros.org:8081/files/comicchat/client/#relay'
+    roomLink:  'http://ohnode.net/#freenode'
   },
   irc: {
-    nick: 'comicrelay',
-    user: 'comic',
-    real: 'relay',
-    channel: '#',
-    host: '',
+    nick: 'c__c',
+    user: 'c',
+    real: 'c',
+    channel: '#freenode',
+    host: 'chat.freenode.net',
     port: 6697,
     ssl: true
   }
 };
-
-
 
 // COMIC CHAT CONNECTION
 
@@ -59,7 +57,6 @@ function makeComicChat () {
       [
         { type: 'join',    room: config.cchat.room },
         { type: 'message', room: config.cchat.room, text: config.cchat.nick },
-        { type: 'message', room: config.cchat.room, text: 'Hello everyone! ' + config.irc.host + ' ' + config.irc.channel +' messenger here.' }
       ].forEach(function (message) {
         connection.sendUTF(JSON.stringify(message));
       });
